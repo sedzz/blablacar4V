@@ -16,11 +16,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ImageButton button = findViewById(R.id.buttonMap); // Suponiendo que tienes un botón en tu layout con id "button"
+        ImageButton button = findViewById(R.id.buttonMap);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Crear un Intent para iniciar SecondActivity
                 Intent intent = new Intent(MainActivity.this, MapActivity.class);
                 startActivity(intent);
             }

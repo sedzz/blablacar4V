@@ -7,25 +7,25 @@
     tools:context=".activities.MainActivity">
 
     <ImageButton
-        android:id="@+id/buttonMap"
+        android:id="@+id/buttonVolante"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="648dp"
-        android:src="@drawable/map"
-        app:layout_constraintEnd_toStartOf="@+id/buttonVolante"
-        app:layout_constraintHorizontal_bias="0.493"
+        android:layout_marginTop="528dp"
+        android:src="@drawable/volante"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.805"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
 
     <ImageButton
-        android:id="@+id/buttonVolante"
+        android:id="@+id/buttonMap"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="656dp"
-        android:src="@drawable/volante"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.829"
+        android:layout_marginTop="520dp"
+        android:src="@drawable/map"
+        app:layout_constraintEnd_toStartOf="@+id/buttonVolante"
+        app:layout_constraintHorizontal_bias="0.467"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
