@@ -10,17 +10,18 @@ import android.view.ViewGroup;
 
 import org.cuatrovientos.blabla4v.R;
 
-public class MenuFragment extends Fragment {
+public class HeaderFragment extends Fragment {
 
-    public MenuFragment() {
+
+    public HeaderFragment() {
         // Required empty public constructor
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        View view = inflater.inflate(R.layout.fragment_menu, container, false);
+        View view = inflater.inflate(R.layout.fragment_header, container, false);
         return view;
     }
 }
