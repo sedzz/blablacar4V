@@ -7,19 +7,21 @@
 
     <ImageButton
         android:id="@+id/buttonVolante"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/volante"
-        android:layout_marginTop="644dp"
-        android:layout_marginLeft="250dp"
-        android:contentDescription="@string/consuctores"/>
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginLeft="270dp"
+        android:layout_marginTop="655dp"
+        android:backgroundTint="#FFFFFF"
+        android:contentDescription="@string/consuctores"
+        android:src="@drawable/volante" />
 
     <ImageButton
         android:id="@+id/buttonMap"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="644dp"
-        android:layout_marginLeft="75dp"
+        android:layout_width="70dp"
+        android:layout_height="60dp"
+        android:layout_marginLeft="80dp"
+        android:layout_marginTop="655dp"
+        android:backgroundTint="#FFFFFF"
         android:contentDescription="@string/mapa"
         android:src="@drawable/map" />
 
