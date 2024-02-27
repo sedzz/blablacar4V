@@ -1,13 +1,9 @@
-package org.cuatrovientos.blabla4v.activities;
-
-import static java.security.AccessController.getContext;
+package org.cuatrovientos.blabla4v.models;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.Manifest;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,13 +20,13 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.cuatrovientos.blabla4v.R;
 
-public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class Map extends AppCompatActivity implements OnMapReadyCallback {
     private GoogleMap mMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.mapactivity_main); // Aquí cambia "activity_main" por "activity_map"
+        setContentView(R.layout.activity_main);
         checkGPS();
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -67,10 +63,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
 
-        LatLngBounds navarraBounds = new LatLngBounds(
-                new LatLng(42.2970, -2.6108), // Límite suroeste de Navarra
-                new LatLng(43.5679, -0.9864));
-        mMap.setLatLngBoundsForCameraTarget(navarraBounds);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(navarraBounds.getCenter(), 8));
+        LatLng pamplona = new LatLng(42.81687, -1.64323);
+        mMap.addMarker(new MarkerOptions().position(pamplona));
+        CameraPosition camera = new CameraPosition.Builder().target(pamplona).zoom(12).tilt(30).build();
+        mMap.moveCamera(CameraUpdateFactory.newCameraPosition(camera));
     }
 }

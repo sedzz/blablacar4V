@@ -4,10 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 
 import org.cuatrovientos.blabla4v.R;
+import org.cuatrovientos.blabla4v.models.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -16,11 +16,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ImageButton button = findViewById(R.id.buttonMap);
-        button.setOnClickListener(new View.OnClickListener() {
+        ImageButton buttonMap = findViewById(R.id.buttonMap);
+        buttonMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, MapActivity.class);
+                Intent intent = new Intent(MainActivity.this, Map.class);
                 startActivity(intent);
             }
         });
