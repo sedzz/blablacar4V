@@ -5,12 +5,10 @@
     android:layout_height="match_parent"
     tools:context=".fragments.DriversFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ExpandableListView
+        android:id="@+id/expandibleList"
         android:layout_width="match_parent"
-        android:layout_height="555dp"
-        android:text="CONDUCTORES"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display4"
-        android:textStyle="bold" />
-
+        android:layout_height="match_parent"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="0dp"/>
 </FrameLayout>
