@@ -23,7 +23,7 @@ public class CreateRouteFragment extends Fragment {
         // Inflate the layout for this fragment
 
 
-        Spinner spinnerVuelta = view.findviewby
+       // Spinner spinnerVuelta = view.findviewby
 
         return inflater.inflate(R.layout.fragment_create_route, container, false);
     }
