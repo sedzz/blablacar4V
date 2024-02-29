@@ -41,6 +41,7 @@ import org.cuatrovientos.blabla4v.fragments.SelectTravelFragment;
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    private Button buttonRoute;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,8 +54,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         ImageButton buttonMap = findViewById(R.id.buttonMap);
         ImageButton buttonDrivers = findViewById(R.id.buttonVolante);
-        Button button2 = findViewById(R.id.btnMenuRoute);
-        button2.setOnClickListener(new View.OnClickListener() {
+        buttonRoute = findViewById(R.id.btnMenuRoute);
+        buttonRoute.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!isFragmentVisible[0]) {
@@ -91,20 +92,21 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     private void toggleFragmentsVisibility(String mapOrDrivers) {
+        buttonRoute = findViewById(R.id.btnMenuRoute);
         Fragment mapFragment = getSupportFragmentManager().findFragmentById(R.id.map);
         Fragment driversFragment = getSupportFragmentManager().findFragmentById(R.id.driversFragment);
-        Fragment filtroFragment = getSupportFragmentManager().findFragmentById(R.id.btnMenuRoute);
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 
         if (mapOrDrivers.equalsIgnoreCase("map")) {
             ft.hide(driversFragment);
             ft.show(mapFragment);
-            ft.show(filtroFragment);
+            buttonRoute.setVisibility(View.VISIBLE);
+
         } else {
             ft.hide(mapFragment);
             ft.show(driversFragment);
-            ft.hide(filtroFragment);
+            buttonRoute.setVisibility(View.INVISIBLE);
         }
         ft.commit();
     }
