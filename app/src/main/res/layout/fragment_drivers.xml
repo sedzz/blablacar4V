@@ -5,10 +5,20 @@
     android:layout_height="match_parent"
     tools:context=".fragments.DriversFragment">
 
+    <Button
+        android:id="@+id/addRouteButton"
+        android:layout_width="57dp"
+        android:layout_height="62dp"
+        android:layout_marginLeft="330dp"
+        android:layout_marginTop="450dp"
+        android:text="+" />
+
     <ExpandableListView
         android:id="@+id/expandibleList"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="448dp"
         android:divider="@android:color/transparent"
-        android:dividerHeight="0dp"/>
+        android:dividerHeight="0dp">
+
+    </ExpandableListView>
 </FrameLayout>

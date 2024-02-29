@@ -1,31 +1,28 @@
 package org.cuatrovientos.blabla4v.fragments;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ExpandableListAdapter;
+import android.widget.Button;
 import android.widget.ExpandableListView;
 
-import org.checkerframework.checker.units.qual.A;
-import org.cuatrovientos.blabla4v.R;
-import org.cuatrovientos.blabla4v.adapters.DriversAdapter;
-import org.cuatrovientos.blabla4v.models.Site;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import org.cuatrovientos.blabla4v.R;
+import org.cuatrovientos.blabla4v.adapters.DriversAdapter;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class DriversFragment extends Fragment {
 
@@ -35,14 +32,43 @@ public class DriversFragment extends Fragment {
     HashMap<String, List<String>> drivers;
 
     public DriversFragment() {
-        // Required empty public constructor
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_drivers, container, false);
 
         expandableListView = view.findViewById(R.id.expandibleList);
+
+        final boolean[] isFragmentVisible = {false};
+        Button addRoute = view.findViewById(R.id.addRouteButton)  ;
+
+        addRoute.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!isFragmentVisible[0]) {
+                    CreateRouteFragment createRouteFragment = new CreateRouteFragment();
+                    FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction(); // Utiliza getChildFragmentManager() para obtener el FragmentManager del Fragment actual
+                    fragmentTransaction.add(R.id.driversFragment, createRouteFragment, "createRouteFragment");
+                    fragmentTransaction.commit();
+                    isFragmentVisible[0] = true;
+                } else {
+                    // Cerrar el fragmento
+                    FragmentManager fragmentManager = getChildFragmentManager();
+                    Fragment fragment = fragmentManager.findFragmentByTag("createRouteFragment");
+                    if (fragment != null) {
+                        fragmentManager.beginTransaction().remove(fragment).commit();
+                    }
+                    isFragmentVisible[0] = false;
+                }
+            }
+        });
+
+
+
+
+
 
         String[] municipios = {
                 "Abáigar",

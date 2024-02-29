@@ -33,9 +33,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.StartActivity" />
-<!--        <activity android:name=".activities.MainActivity" />-->
+        <!--<activity android:name=".activities.MainActivity" />!-->
         <activity android:name=".models.Map" />
-<!--        <activity android:name=".activities.UserRegisterActivity" />-->
+        <activity android:name=".activities.UserRegisterActivity" />
     </application>
 
 </manifest>
