@@ -1,5 +1,9 @@
 package org.cuatrovientos.blabla4v.activities;
 
+import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageButton;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -23,6 +27,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.cuatrovientos.blabla4v.R;
+import org.cuatrovientos.blabla4v.interfaces.ApiService;
+
+import java.io.IOException;
+
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 import org.cuatrovientos.blabla4v.fragments.SelectTravelFragment;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
@@ -101,4 +112,32 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         CameraPosition camera = new CameraPosition.Builder().target(pamplona).zoom(11).tilt(30).build();
         mMap.moveCamera(CameraUpdateFactory.newCameraPosition(camera));
     }
-}
+
+    public void createRoute() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Response<Object> response = getRetrofit().create(ApiService.class).getRoute("", "", "").execute();
+                    if (response.isSuccessful()) {
+                        System.out.println("Route created");
+                    } else {
+                        System.out.println("Error creating route");
+                    }
+                } catch (IOException e) {
+                    System.out.println("Error creating route");
+
+                }
+            }
+        }).start();
+    }
+
+
+        public Retrofit getRetrofit() {
+            return new Retrofit.Builder()
+                    .baseUrl("https://api.openrouteservice.org/")
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+        }
+    }
+
