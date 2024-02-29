@@ -3,12 +3,15 @@ package org.cuatrovientos.blabla4v.activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageButton;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -20,6 +23,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.cuatrovientos.blabla4v.R;
+import org.cuatrovientos.blabla4v.fragments.SelectTravelFragment;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -32,9 +36,31 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         mapFragment.getMapAsync(this);
 
         toggleFragmentsVisibility("map");
+        final boolean[] isFragmentVisible = {false};
 
         ImageButton buttonMap = findViewById(R.id.buttonMap);
         ImageButton buttonDrivers = findViewById(R.id.buttonVolante);
+        Button button2 = findViewById(R.id.btnMenuRoute);
+        button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!isFragmentVisible[0]) {
+                    SelectTravelFragment selectTravelFragment = new SelectTravelFragment();
+                    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction.add(R.id.map, selectTravelFragment, "selectTravelFragment");
+                    fragmentTransaction.commit();
+                    isFragmentVisible[0] = true;
+                } else {
+                    // Cerrar el fragmento
+                    FragmentManager fragmentManager = getSupportFragmentManager();
+                    Fragment fragment = fragmentManager.findFragmentByTag("selectTravelFragment");
+                    if (fragment != null) {
+                        fragmentManager.beginTransaction().remove(fragment).commit();
+                    }
+                    isFragmentVisible[0] = false;
+                }
+            }
+        });
 
         buttonMap.setOnClickListener(new View.OnClickListener() {
             @Override
