@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import org.cuatrovientos.blabla4v.R;
+import org.cuatrovientos.blabla4v.utils.Locations;
 
 public class SelectTravelFragment extends Fragment {
 
@@ -29,9 +30,10 @@ public class SelectTravelFragment extends Fragment {
         Spinner spinnerVuelta = view.findViewById(R.id.spinnerVuelta);
         Spinner spinnerIda = view.findViewById(R.id.spinnerIda);
 
-        String[] opciones = {"Cuatrovientos","Opción 1", "Opción 2", "Opción 3"};
+//        String[] opciones = {"Cuatrovientos","Opción 1", "Opción 2", "Opción 3"};
+        Locations locations = new Locations();
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, opciones);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, locations.getMunicipios());
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         spinnerVuelta.setAdapter(adapter);
