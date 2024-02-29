@@ -31,7 +31,11 @@ public class DriversAdapter extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return this.drivers.get(this.sites.get(groupPosition)).size();
+        if (this.drivers.get(this.sites.get(groupPosition)) != null) {
+            return this.drivers.get(this.sites.get(groupPosition)).size();
+        } else {
+            return 0; // o devuelve un valor predeterminado en caso de que la lista sea null
+        }
     }
 
     @Override

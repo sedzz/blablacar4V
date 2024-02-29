@@ -15,6 +15,8 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.Firebase;
+import com.google.firebase.FirebaseApp;
 
 import org.cuatrovientos.blabla4v.R;
 import org.cuatrovientos.blabla4v.interfaces.ApiService;

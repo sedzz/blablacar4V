@@ -36,5 +36,6 @@
         <activity android:name=".models.Map" />
         <activity android:name=".activities.UserRegisterActivity" />
     </application>
+    <uses-permission android:name="com.google.android.gms.permission.ACTIVITY_RECOGNITION" />
 
 </manifest>
