@@ -1,10 +1,9 @@
 package org.cuatrovientos.blabla4v.fragments;
 
+import static android.content.ContentValues.TAG;
+
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,26 +14,21 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import org.cuatrovientos.blabla4v.R;
 import org.cuatrovientos.blabla4v.adapters.DriversAdapter;
-import org.cuatrovientos.blabla4v.models.Site;
+import org.cuatrovientos.blabla4v.utils.Locations;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 public class DriversFragment extends Fragment {
 
@@ -52,7 +46,7 @@ public class DriversFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_drivers, container, false);
 
         expandableListView = view.findViewById(R.id.expandibleList);
-        db = FirebaseFirestore.getInstance();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference tablaDrivers = db.collection("driver");
         CollectionReference tablaUsers = db.collection("user");
 
@@ -88,8 +82,10 @@ public class DriversFragment extends Fragment {
         adapter = new DriversAdapter(getContext(), sites, drivers);
         expandableListView.setAdapter(adapter);
 
+        Locations locations = new Locations();
+
         Log.e(TAG, "PASA POR AQUI");
-        for (String m : municipios) {
+        for (String m : locations.getMunicipios()) {
             Log.e(TAG, "PASA POR AQUI" + m);
             final String municipio = m; // Variable final local para utilizar dentro de la devolución de llamada
             sites.add(municipio);
