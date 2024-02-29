@@ -91,6 +91,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     private void toggleFragmentsVisibility(String mapOrDrivers) {
+        Button buttonRoute = findViewById(R.id.btnMenuRoute);
         Fragment mapFragment = getSupportFragmentManager().findFragmentById(R.id.map);
         Fragment driversFragment = getSupportFragmentManager().findFragmentById(R.id.driversFragment);
         Fragment filtroFragment = getSupportFragmentManager().findFragmentById(R.id.btnMenuRoute);
