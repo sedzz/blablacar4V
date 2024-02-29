@@ -5,14 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.MainActivity">
-<!--    <androidx.fragment.app.FragmentContainerView-->
-<!--        android:id="@+id/navHostFragment"-->
-<!--        android:name="androidx.navigation.fragment.NavHostFragment"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="0dp"-->
-<!--        app:navGraph="@navigation/nav"-->
-<!--        tools:ignore="MissingConstraints" />-->
-
 
     <fragment
         android:id="@+id/header"
@@ -31,7 +23,6 @@
         app:layout_constraintTop_toBottomOf="@+id/header"
         tools:context=".models.Map" />
 
-
     <fragment
         android:id="@+id/driversFragment"
         android:name="org.cuatrovientos.blabla4v.fragments.DriversFragment"
@@ -46,25 +37,9 @@
     <fragment
         android:id="@+id/menuInterfaz"
         android:name="org.cuatrovientos.blabla4v.fragments.MenuFragment"
-        android:layout_width="470dp"
-        android:layout_height="739dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         tools:ignore="MissingConstraints"
-        tools:layout="@layout/fragment_menu"
-        tools:layout_editor_absoluteX="-30dp"
-        tools:layout_editor_absoluteY="-4dp" />
-
-    <Button
-        android:id="@+id/btnMenuRoute"
-        android:layout_width="57dp"
-        android:layout_height="63dp"
-        android:layout_marginTop="116dp"
-        android:layout_marginBottom="569dp"
-        android:text="+"
-        app:layout_constraintBottom_toBottomOf="@+id/menuInterfaz"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.956"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/header"
-        app:layout_constraintVertical_bias="1.0" />
+        tools:layout="@layout/fragment_menu" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
