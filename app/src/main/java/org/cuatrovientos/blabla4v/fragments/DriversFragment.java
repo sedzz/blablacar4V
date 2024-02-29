@@ -83,8 +83,6 @@ public class DriversFragment extends Fragment {
         expandableListView.setAdapter(adapter);
 
         Locations locations = new Locations();
-
-        Log.e(TAG, "PASA POR AQUI");
         for (String m : locations.getMunicipios()) {
             Log.e(TAG, "PASA POR AQUI" + m);
             final String municipio = m; // Variable final local para utilizar dentro de la devolución de llamada

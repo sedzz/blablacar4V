@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         if (mapOrDrivers.equalsIgnoreCase("map")) {
             ft.hide(driversFragment);
             ft.show(mapFragment);
-            ft.show(filtroFragment);
+            //ft.show(filtroFragment);
         } else {
             ft.hide(mapFragment);
             ft.show(driversFragment);
