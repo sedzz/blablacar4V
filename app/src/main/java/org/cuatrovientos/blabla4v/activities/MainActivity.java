@@ -47,8 +47,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private GoogleMap mMap;
     private MarkerOptions marker;
-    private Button btnCalculate;
-
     String start = "";
     String end = "";
     private Polyline currentPolyline;
@@ -66,8 +64,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         ImageButton buttonMap = findViewById(R.id.buttonMap);
         ImageButton buttonDrivers = findViewById(R.id.buttonVolante);
         Button button2 = findViewById(R.id.btnMenuRoute);
-
-        btnCalculate = findViewById(R.id.btnCalculateRoute);
 
         button2.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -26,20 +26,6 @@
         app:layout_constraintTop_toBottomOf="@+id/header"
         tools:context=".models.Map" />
 
-
-    <Button
-        android:id="@+id/btnCalculateRoute"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_marginBottom="116dp"
-        android:text="Calcular Ruta"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="MissingConstraints" />
-
     <fragment
         android:id="@+id/driversFragment"
         android:name="org.cuatrovientos.blabla4v.fragments.DriversFragment"
