@@ -6,8 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".activities.MainActivity">
 
-
-
     <fragment
         android:id="@+id/header"
         android:name="org.cuatrovientos.blabla4v.fragments.HeaderFragment"
@@ -15,7 +13,6 @@
         android:layout_height="wrap_content"
         tools:ignore="MissingConstraints"
         tools:layout="@layout/fragment_header" />
-
 
     <fragment xmlns:map="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -37,16 +34,6 @@
         tools:layout="@layout/fragment_drivers"
         android:visibility="gone"/>
 
-    <fragment
-        android:id="@+id/menuInterfaz"
-        android:name="org.cuatrovientos.blabla4v.fragments.MenuFragment"
-        android:layout_width="470dp"
-        android:layout_height="739dp"
-        tools:ignore="MissingConstraints"
-        tools:layout="@layout/fragment_menu"
-        tools:layout_editor_absoluteX="-30dp"
-        tools:layout_editor_absoluteY="-4dp" />
-
     <Button
         android:id="@+id/btnMenuRoute"
         android:layout_width="57dp"
@@ -60,5 +47,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/header"
         app:layout_constraintVertical_bias="1.0"/>
+
+    <fragment
+        android:id="@+id/menuInterfaz"
+        android:name="org.cuatrovientos.blabla4v.fragments.MenuFragment"
+        android:layout_width="470dp"
+        android:layout_height="739dp"
+        tools:ignore="MissingConstraints"
+        tools:layout="@layout/fragment_menu"
+        tools:layout_editor_absoluteX="-30dp"
+        tools:layout_editor_absoluteY="-4dp" />
+
+    <FrameLayout
+        android:id="@+id/userSettingsContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" /> <!-- Inicialmente, establece la visibilidad en 'gone' -->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
