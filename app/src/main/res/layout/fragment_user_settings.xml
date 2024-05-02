@@ -267,7 +267,7 @@
                                 android:layout_height="40dp"
                                 android:background="@drawable/circular_grey_bordersolid"
                                 android:padding="10dp"
-                                android:src="@drawable/ic_dni_24dp" />
+                                android:src="@drawable/dni" />
 
                             <EditText
                                 android:id="@+id/userDni"
