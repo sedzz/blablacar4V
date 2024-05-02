@@ -74,7 +74,6 @@ public class UserRegisterActivity extends AppCompatActivity {
                 map.put("id",id);
                 map.put("name",userName);
                 map.put("email",email);
-                map.put("password",password);
                 map.put("dni",dni);
                 map.put("home",place);
 

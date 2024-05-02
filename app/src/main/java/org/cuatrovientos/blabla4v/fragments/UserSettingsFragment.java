@@ -1,11 +1,16 @@
 package org.cuatrovientos.blabla4v.fragments;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +28,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import org.cuatrovientos.blabla4v.R;
+import org.cuatrovientos.blabla4v.activities.LoginActivity;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -40,18 +46,19 @@ public class UserSettingsFragment extends Fragment {
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
-        EditText userEmailEditText = view.findViewById(R.id.userEmail);
+        TextView userEmailTextView = view.findViewById(R.id.userEmail);
         EditText userHomeEditText = view.findViewById(R.id.userHome);
         EditText userDniEditText = view.findViewById(R.id.userDni);
         TextView userNameEditText = view.findViewById(R.id.userName);
         TextView editProfileTextView = view.findViewById(R.id.editProfile);
-        Button btnSaveChanges = view.findViewById(R.id.btnSaveChanges);
 
+        Button btnSaveChanges = view.findViewById(R.id.btnSaveChanges);
+        Button btnChangePassword = view.findViewById(R.id.btnChangePassword);
         // Make btnSaveChanges invisible initially
         btnSaveChanges.setVisibility(View.INVISIBLE);
+        ImageView logoutImageView = view.findViewById(R.id.logout);
+        ImageView backImageView = view.findViewById(R.id.back);
 
-        // Disable editing of the TextViews
-        userEmailEditText.setEnabled(false);
         userHomeEditText.setEnabled(false);
         userDniEditText.setEnabled(false);
 
@@ -61,9 +68,7 @@ public class UserSettingsFragment extends Fragment {
             uid[0] = currentUser.getUid();
             String email = currentUser.getEmail();
 
-            userEmailEditText.setText(email);
-
-            Toast.makeText(getContext(), "UID: " + uid[0], Toast.LENGTH_SHORT).show();
+            userEmailTextView.setText(email);
 
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             db.collection("user").document(uid[0])
@@ -72,7 +77,6 @@ public class UserSettingsFragment extends Fragment {
                         public void onEvent(@Nullable DocumentSnapshot snapshot,
                                             @Nullable FirebaseFirestoreException e) {
                             if (e != null) {
-                                // Error getting the document
                                 return;
                             }
 
@@ -81,9 +85,9 @@ public class UserSettingsFragment extends Fragment {
                                 String dni = snapshot.getString("dni");
                                 String name = snapshot.getString("name");
 
+                                userNameEditText.setText(name);
                                 userHomeEditText.setText(home);
                                 userDniEditText.setText(dni);
-                                userNameEditText.setText(name);
                             } else {
                                 Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
                             }
@@ -93,8 +97,7 @@ public class UserSettingsFragment extends Fragment {
             btnSaveChanges.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // Recoger los datos de los EditText
-                    String email = userEmailEditText.getText().toString();
+                    String email = userEmailTextView.getText().toString();
                     String home = userHomeEditText.getText().toString();
                     String dni = userDniEditText.getText().toString();
                     String name = userNameEditText.getText().toString();
@@ -116,7 +119,7 @@ public class UserSettingsFragment extends Fragment {
                                     Toast.makeText(getContext(), "Datos actualizados", Toast.LENGTH_SHORT).show();
 
                                     // Deshabilitar la edición de los EditText
-                                    userEmailEditText.setEnabled(false);
+                                    userEmailTextView.setEnabled(false);
                                     userHomeEditText.setEnabled(false);
                                     userDniEditText.setEnabled(false);
                                     userNameEditText.setEnabled(false);
@@ -137,18 +140,82 @@ public class UserSettingsFragment extends Fragment {
             editProfileTextView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // Enable editing of the TextViews when the "Edit" TextView is clicked
-                    userEmailEditText.setEnabled(true);
-                    userHomeEditText.setEnabled(true);
-                    userDniEditText.setEnabled(true);
-                    userNameEditText.setEnabled(true);
+                    boolean isEditing = userHomeEditText.isEnabled();
 
-                    // Make btnSaveChanges visible
-                    btnSaveChanges.setVisibility(View.VISIBLE);
+                    if (isEditing) {
+                        userHomeEditText.setEnabled(false);
+                        userDniEditText.setEnabled(false);
+
+                        editProfileTextView.setText("Editar");
+
+                        btnSaveChanges.setVisibility(View.INVISIBLE);
+                    } else {
+                        userHomeEditText.setEnabled(true);
+                        userDniEditText.setEnabled(true);
+
+                        editProfileTextView.setText("Cancelar");
+
+                        // Mostrar el botón de guardar cambios
+                        btnSaveChanges.setVisibility(View.VISIBLE);
+                    }
                 }
             });
-        } else {
-            // The user is not authenticated
+
+            btnChangePassword.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    FirebaseAuth auth = FirebaseAuth.getInstance();
+                    String emailAddress = userEmailTextView.getText().toString();
+
+                    auth.sendPasswordResetEmail(emailAddress)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Toast.makeText(getContext(), "Correo de restablecimiento de contraseña enviado", Toast.LENGTH_SHORT).show();
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(getContext(), "Error al enviar el correo de restablecimiento de contraseña", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                }
+            });
+
+
+            logoutImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new AlertDialog.Builder(getContext())
+                            .setTitle("Cerrar sesión")
+                            .setMessage("¿Estás seguro de que quieres cerrar sesión?")
+                            .setPositiveButton("Sí", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // Cerrar sesión
+                                    FirebaseAuth.getInstance().signOut();
+                                    // Redirigir al usuario a la pantalla de inicio de sesión
+                                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+                                    startActivity(intent);
+                                    getActivity().finish();
+                                }
+                            })
+                            .setNegativeButton("No", null)
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .show();
+                }
+            });
+
+            backImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Cerrar el fragmento actual y volver a MainActivity
+                    if (getFragmentManager() != null) {
+                        getFragmentManager().popBackStack();
+                    }
+                }
+            });
+
         }
 
         return view;
