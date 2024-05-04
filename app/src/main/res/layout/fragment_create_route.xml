@@ -3,16 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="200dp"
-    android:layout_marginTop="400dp"
-    android:background="#B43EFDB1"
+    android:layout_marginTop="300dp"
+    android:background="#12a14b"
     tools:context=".fragments.CreateRouteFragment">
-
 
     <TextView
         android:id="@+id/textViewVuelta"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="40dp"
+        android:layout_marginStart="40dp"
         android:layout_marginTop="70dp"
         android:text="VUELTA:"
         android:textColor="@color/black"
@@ -22,28 +21,48 @@
         android:id="@+id/textViewIda"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="40dp"
+        android:layout_marginStart="40dp"
         android:layout_marginTop="30dp"
         android:text="IDA:"
         android:textColor="@color/black"
         android:textSize="20sp" />
 
     <Spinner
-        android:id="@+id/spinnerIda"
+        android:id="@+id/spinnerStart"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="140dp"
+        android:layout_marginStart="140dp"
         android:layout_marginTop="30dp"
         android:backgroundTint="@color/black"
         android:textColor="@color/black"/>
 
     <Spinner
-        android:id="@+id/spinnerVuelta"
+        android:id="@+id/spinnerEnd"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="140dp"
+        android:layout_marginStart="140dp"
         android:layout_marginTop="70dp"
         android:backgroundTint="@color/black"
         android:textColor="@color/black"/>
+
+    <EditText
+        android:id="@+id/editTextSeats"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="140dp"
+        android:layout_marginTop="110dp"
+        android:inputType="number"
+        android:backgroundTint="@color/black"
+        android:textColor="@color/black"/>
+
+    <Button
+        android:id="@+id/buttonCreateRoute"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="150dp"
+        android:layout_gravity="center_horizontal"
+        android:text="Create Route"/>
+
+
 
 </FrameLayout>

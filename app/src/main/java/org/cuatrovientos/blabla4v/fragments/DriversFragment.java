@@ -1,116 +1,83 @@
 package org.cuatrovientos.blabla4v.fragments;
 
-import static android.content.ContentValues.TAG;
-
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ExpandableListView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import org.cuatrovientos.blabla4v.R;
-import org.cuatrovientos.blabla4v.adapters.DriversAdapter;
-import org.cuatrovientos.blabla4v.utils.Locations;
+import org.cuatrovientos.blabla4v.adapters.RouteExpandableListAdapter;
+import org.cuatrovientos.blabla4v.models.Route;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-
 public class DriversFragment extends Fragment {
 
-    ExpandableListView expandableListView;
-    DriversAdapter adapter;
-    List<String> sites;
-    HashMap<String, List<String>> drivers;
+    private ExpandableListView expandableListViewRoutes;
+    private RouteExpandableListAdapter routeExpandableListAdapter;
+    private List<Route> listDataHeader;
+    private HashMap<Route, List<String>> listDataChild;
 
     public DriversFragment() {
-        // Required empty public constructor
+        // Constructor vacío requerido
     }
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_drivers, container, false);
 
-        expandableListView = view.findViewById(R.id.expandibleList);
+        Button addRouteButton = view.findViewById(R.id.addRouteButton);
+        expandableListViewRoutes = view.findViewById(R.id.expandibleList);
+
+        listDataHeader = new ArrayList<>();
+        listDataChild = new HashMap<>();
+
+        routeExpandableListAdapter = new RouteExpandableListAdapter(requireContext(), listDataHeader, listDataChild);
+        expandableListViewRoutes.setAdapter(routeExpandableListAdapter);
+
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference tablaDrivers = db.collection("driver");
-        CollectionReference tablaUsers = db.collection("user");
+        db.collection("routes")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            Route route = document.toObject(Route.class);
+                            listDataHeader.add(route);
+                            listDataChild.put(route, route.getPassengers());
+                        }
+                        routeExpandableListAdapter.notifyDataSetChanged();
+                    }
+                });
 
 
-        final boolean[] isFragmentVisible = {false};
-        Button addRoute = view.findViewById(R.id.addRouteButton)  ;
-
-        addRoute.setOnClickListener(new View.OnClickListener() {
+        addRouteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!isFragmentVisible[0]) {
-                    CreateRouteFragment createRouteFragment = new CreateRouteFragment();
-                    FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction(); // Utiliza getChildFragmentManager() para obtener el FragmentManager del Fragment actual
-                    fragmentTransaction.add(R.id.driversFragment, createRouteFragment, "createRouteFragment");
+                FragmentManager fragmentManager = getFragmentManager();
+                CreateRouteFragment createRouteFragment = (CreateRouteFragment) fragmentManager.findFragmentByTag("createRouteFragment");
+
+                if (createRouteFragment == null || !createRouteFragment.isVisible()) {
+                    createRouteFragment = new CreateRouteFragment();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(R.id.driversFragment, createRouteFragment, "createRouteFragment");
+                    fragmentTransaction.addToBackStack(null);
                     fragmentTransaction.commit();
-                    isFragmentVisible[0] = true;
                 } else {
-                    // Cerrar el fragmento
-                    FragmentManager fragmentManager = getChildFragmentManager();
-                    Fragment fragment = fragmentManager.findFragmentByTag("createRouteFragment");
-                    if (fragment != null) {
-                        fragmentManager.beginTransaction().remove(fragment).commit();
-                    }
-                    isFragmentVisible[0] = false;
+                    fragmentManager.popBackStack();
                 }
             }
-        });
-
-        sites = new ArrayList<>();
-        drivers = new HashMap<>();
-
-        // Inicializar el adaptador con la lista de sitios y conductores
-        adapter = new DriversAdapter(getContext(), sites, drivers);
-        expandableListView.setAdapter(adapter);
-
-        Locations locations = new Locations();
-        for (String m : locations.getMunicipios()) {
-            Log.e(TAG, "PASA POR AQUI" + m);
-            final String municipio = m; // Variable final local para utilizar dentro de la devolución de llamada
-            sites.add(municipio);
-            Query query = tablaDrivers.whereGreaterThan("location", municipio);
-
-            query.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                @Override
-                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                    List<String> conductores = new ArrayList<>();
-                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                        String location = document.getString("location");
-                        Log.e(TAG, "PASA POR AQUI");
-                        if (location.equals(municipio)){
-                            conductores.add(document.getString("userId"));
-                        }
-                    }
-                    // Agregar conductores al HashMap después de que se complete la consulta
-                    drivers.put(municipio, conductores);
-                    adapter.notifyDataSetChanged(); // Notificar al adaptador sobre los cambios en los datos
-                }
-            });
-        }
-
-        expandableListView.setOnChildClickListener((parent, v, groupPosition, childPosition, id) -> {
-            Object selectedItem = drivers.get(sites.get(groupPosition)).get(childPosition);
-            // Hacer algo con el conductor seleccionado si es necesario
-            return false;
         });
 
         return view;
