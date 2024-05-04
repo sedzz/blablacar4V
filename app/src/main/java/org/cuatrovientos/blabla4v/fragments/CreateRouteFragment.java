@@ -1,13 +1,17 @@
 package org.cuatrovientos.blabla4v.fragments;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -25,6 +29,7 @@ import org.cuatrovientos.blabla4v.R;
 import org.cuatrovientos.blabla4v.utils.Locations;
 
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,6 +46,8 @@ public class CreateRouteFragment extends Fragment {
         Spinner spinnerStart = view.findViewById(R.id.spinnerStart);
         Spinner spinnerEnd = view.findViewById(R.id.spinnerEnd);
         EditText editTextSeats = view.findViewById(R.id.editTextSeats);
+        EditText editTextDate = view.findViewById(R.id.editTextDate);
+        EditText editTextTime = view.findViewById(R.id.editTextTime);
         Button buttonCreateRoute = view.findViewById(R.id.buttonCreateRoute);
 
         Locations locations = new Locations();
@@ -51,6 +58,43 @@ public class CreateRouteFragment extends Fragment {
         spinnerStart.setAdapter(adapter);
         spinnerEnd.setAdapter(adapter);
 
+        editTextDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Calendar c = Calendar.getInstance();
+                int year = c.get(Calendar.YEAR);
+                int month = c.get(Calendar.MONTH);
+                int day = c.get(Calendar.DAY_OF_MONTH);
+
+                DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(),
+                        new DatePickerDialog.OnDateSetListener() {
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                editTextDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                            }
+                        }, year, month, day);
+                datePickerDialog.show();
+            }
+        });
+
+        editTextTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Calendar c = Calendar.getInstance();
+                int hour = c.get(Calendar.HOUR_OF_DAY);
+                int minute = c.get(Calendar.MINUTE);
+
+                TimePickerDialog timePickerDialog = new TimePickerDialog(getActivity(),
+                        new TimePickerDialog.OnTimeSetListener() {
+                            @Override
+                            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                                editTextTime.setText(hourOfDay + ":" + minute);
+                            }
+                        }, hour, minute, false);
+                timePickerDialog.show();
+            }
+        });
+
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         buttonCreateRoute.setOnClickListener(new View.OnClickListener() {
@@ -60,6 +104,8 @@ public class CreateRouteFragment extends Fragment {
                 String start = spinnerStart.getSelectedItem().toString();
                 String end = spinnerEnd.getSelectedItem().toString();
                 int availableSeats = Integer.parseInt(editTextSeats.getText().toString());
+                String date = editTextDate.getText().toString();
+                String time = editTextTime.getText().toString();
 
                 FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
                 if (currentUser != null) {
@@ -75,7 +121,9 @@ public class CreateRouteFragment extends Fragment {
                                     ruta.put("start", start);
                                     ruta.put("end", end);
                                     ruta.put("availableSeats", availableSeats);
-                                    ruta.put("passengers", Arrays.asList()); // Aquí puedes agregar los usuarios que se asignarán a la ruta
+                                    ruta.put("date", date);
+                                    ruta.put("time", time);
+                                    ruta.put("passengers", Arrays.asList());
 
                                     db.collection("routes")
                                             .add(ruta)
@@ -83,7 +131,6 @@ public class CreateRouteFragment extends Fragment {
                                                 @Override
                                                 public void onSuccess(DocumentReference documentReference) {
                                                     Toast.makeText(requireContext(), "Ruta creada exitosamente", Toast.LENGTH_SHORT).show();
-                                                    // Vuelve al fragmento anterior después de crear la ruta
                                                     requireActivity().getSupportFragmentManager().popBackStack();
                                                 }
                                             })

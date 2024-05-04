@@ -2,15 +2,24 @@ package org.cuatrovientos.blabla4v.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ExpandableListView;
+import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentTransaction;
 
 import org.cuatrovientos.blabla4v.R;
+import org.cuatrovientos.blabla4v.fragments.RouteInfo;
 import org.cuatrovientos.blabla4v.models.Route;
+import org.cuatrovientos.blabla4v.models.User;
 
 import java.util.HashMap;
 import java.util.List;
@@ -22,11 +31,16 @@ public class RouteExpandableListAdapter extends BaseExpandableListAdapter {
     // child data in format of header title, child title
     private HashMap<Route, List<String>> listDataChild;
 
+    private ExpandableListView expandableListView;
+
+
     public RouteExpandableListAdapter(Context context, List<Route> listDataHeader,
-                                      HashMap<Route, List<String>> listChildData) {
+                                      HashMap<Route, List<String>> listChildData,ExpandableListView expandableListView) {
         this.context = context;
         this.listDataHeader = listDataHeader;
         this.listDataChild = listChildData;
+        this.expandableListView = expandableListView;
+
     }
 
     @Override
@@ -40,33 +54,6 @@ public class RouteExpandableListAdapter extends BaseExpandableListAdapter {
         return childPosition;
     }
 
-    @Override
-    public View getChildView(int groupPosition, final int childPosition,
-                             boolean isLastChild, View convertView, ViewGroup parent) {
-
-        // Obtén el nombre del pasajero
-        final String passengerName = (String) getChild(groupPosition, childPosition);
-
-        // Obtén la ruta
-        Route route = (Route) getGroup(groupPosition);
-        String driverName = route.getDriver();
-
-        if (convertView == null) {
-            LayoutInflater infalInflater = (LayoutInflater) this.context
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = infalInflater.inflate(R.layout.list_item, null);
-        }
-
-        // Configura el TextView para mostrar el nombre del conductor
-        TextView txtDriverName = (TextView) convertView.findViewById(R.id.driverNameTextView);
-        txtDriverName.setText(driverName);
-
-        // Configura el TextView para mostrar el nombre del pasajero
-        TextView txtListChild = (TextView) convertView.findViewById(R.id.lblListItem);
-        txtListChild.setText(passengerName);
-
-        return convertView;
-    }
 
 
     @Override
@@ -94,8 +81,8 @@ public class RouteExpandableListAdapter extends BaseExpandableListAdapter {
     @SuppressLint("SetTextI18n")
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded,
-                             View convertView, ViewGroup parent) {
-        Route route = (Route) getGroup(groupPosition);
+                             View convertView, final ViewGroup parent) {
+        final Route route = (Route) getGroup(groupPosition);
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this.context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -104,11 +91,47 @@ public class RouteExpandableListAdapter extends BaseExpandableListAdapter {
 
         TextView lblListHeader = (TextView) convertView
                 .findViewById(R.id.lblListHeader);
+        ImageView availabilityImageView = (ImageView) convertView
+                .findViewById(R.id.availabilityImageView);
+
+        int passengersCount = getChildrenCount(groupPosition);
+        int totalSeats = route.getAvailableSeats();
+        String day = route.getDate();
+        String time = route.getTime();
+
+
         lblListHeader.setText(route.getStart() + " - " + route.getEnd());
 
+        if (passengersCount < totalSeats) {
+            availabilityImageView.setColorFilter(ContextCompat.getColor(context, R.color.green));
+        } else {
+            availabilityImageView.setColorFilter(ContextCompat.getColor(context, R.color.red));
+        }
 
+        lblListHeader.setOnClickListener(v -> {
+            Route selectedRoute = listDataHeader.get(groupPosition);
+
+            // Make sure all fields of the route are set here
+
+            // Create a new instance of RouteInfoFragment
+            RouteInfo routeInfoFragment = new RouteInfo();
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("selectedRoute", selectedRoute);
+            routeInfoFragment.setArguments(bundle);
+
+            // Replace the current fragment with RouteInfoFragment
+            FragmentTransaction transaction = ((FragmentActivity) context).getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.driversFragment, routeInfoFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
+        });
 
         return convertView;
+    }
+
+    @Override
+    public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+        return null;
     }
 
     @Override

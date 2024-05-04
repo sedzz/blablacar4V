@@ -13,7 +13,7 @@
         android:layout_marginTop="655dp"
         android:backgroundTint="#FFFFFF"
         android:contentDescription="@string/conductores"
-        android:src="@drawable/volante" />
+        android:src="@drawable/ic_volante" />
 
     <ImageButton
         android:id="@+id/buttonMap"

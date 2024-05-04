@@ -27,6 +27,7 @@ public class DriversFragment extends Fragment {
 
     private ExpandableListView expandableListViewRoutes;
     private RouteExpandableListAdapter routeExpandableListAdapter;
+
     private List<Route> listDataHeader;
     private HashMap<Route, List<String>> listDataChild;
 
@@ -44,8 +45,7 @@ public class DriversFragment extends Fragment {
         listDataHeader = new ArrayList<>();
         listDataChild = new HashMap<>();
 
-        routeExpandableListAdapter = new RouteExpandableListAdapter(requireContext(), listDataHeader, listDataChild);
-        expandableListViewRoutes.setAdapter(routeExpandableListAdapter);
+        routeExpandableListAdapter = new RouteExpandableListAdapter(requireContext(), listDataHeader, listDataChild, expandableListViewRoutes);        expandableListViewRoutes.setAdapter(routeExpandableListAdapter);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("routes")
@@ -54,6 +54,7 @@ public class DriversFragment extends Fragment {
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             Route route = document.toObject(Route.class);
+                            route.setId(document.getId());
                             listDataHeader.add(route);
                             listDataChild.put(route, route.getPassengers());
                         }

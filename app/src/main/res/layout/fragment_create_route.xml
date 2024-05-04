@@ -2,10 +2,40 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="200dp"
-    android:layout_marginTop="300dp"
+    android:layout_height="300dp"
+    android:layout_marginTop="190dp"
     android:background="#12a14b"
     tools:context=".fragments.CreateRouteFragment">
+
+    <EditText
+        android:id="@+id/editTextDate"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="200dp"
+        android:layout_marginTop="160dp"
+        android:backgroundTint="@color/black"
+        android:inputType="date"
+        android:textColor="@color/black" />
+
+    <EditText
+        android:id="@+id/editTextTime"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="200dp"
+        android:layout_marginTop="200dp"
+        android:backgroundTint="@color/black"
+        android:inputType="time"
+        android:textColor="@color/black" />
+
+    <TextView
+        android:id="@+id/textViewPasajeros"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="120dp"
+        android:text="PASAJEROS"
+        android:textColor="@color/black"
+        android:textSize="15sp" />
 
     <TextView
         android:id="@+id/textViewVuelta"
@@ -13,9 +43,21 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
         android:layout_marginTop="70dp"
-        android:text="VUELTA:"
+        android:text="DESTINO:"
         android:textColor="@color/black"
-        android:textSize="20sp" />
+        android:textSize="15sp" />
+
+
+
+    <TextView
+        android:id="@+id/textViewHora"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="180dp"
+        android:text="HORA DE SALIDA"
+        android:textColor="@color/black"
+        android:textSize="15sp" />
 
     <TextView
         android:id="@+id/textViewIda"
@@ -23,9 +65,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
         android:layout_marginTop="30dp"
-        android:text="IDA:"
+        android:text="ORIGEN:"
         android:textColor="@color/black"
-        android:textSize="20sp" />
+        android:textSize="15sp" />
 
     <Spinner
         android:id="@+id/spinnerStart"
@@ -59,7 +101,7 @@
         android:id="@+id/buttonCreateRoute"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="150dp"
+        android:layout_marginTop="250dp"
         android:layout_gravity="center_horizontal"
         android:text="Create Route"/>
 

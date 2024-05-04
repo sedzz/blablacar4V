@@ -55,9 +55,19 @@ public class UserRegisterActivity extends AppCompatActivity {
                 String password = etPassword.getText().toString().trim();
                 String place = etPlace.getText().toString().trim();
 
-                if(userName.isEmpty() && email.isEmpty() && dni.isEmpty() && password.isEmpty() && place.isEmpty()){
-                    Toast.makeText(UserRegisterActivity.this, "Please fill all the fields", Toast.LENGTH_SHORT).show();
-                }else{
+                if(userName.isEmpty()){
+                    Toast.makeText(UserRegisterActivity.this, "Please fill the username field", Toast.LENGTH_SHORT).show();
+                } else if(email.isEmpty()){
+                    Toast.makeText(UserRegisterActivity.this, "Please fill the email field", Toast.LENGTH_SHORT).show();
+                } else if(dni.isEmpty()){
+                    Toast.makeText(UserRegisterActivity.this, "Please fill the DNI field", Toast.LENGTH_SHORT).show();
+                } else if(password.isEmpty()){
+                    Toast.makeText(UserRegisterActivity.this, "Please fill the password field", Toast.LENGTH_SHORT).show();
+                } else if(password.length() < 6){
+                    Toast.makeText(UserRegisterActivity.this, "Password must be at least 6 characters", Toast.LENGTH_SHORT).show();
+                } else if(place.isEmpty()){
+                    Toast.makeText(UserRegisterActivity.this, "Please fill the place field", Toast.LENGTH_SHORT).show();
+                } else {
                     registerUser(userName, email, dni, password, place);
                 }
             }
