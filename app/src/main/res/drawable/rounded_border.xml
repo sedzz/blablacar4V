@@ -1,0 +1,6 @@
+<!-- rounded_border.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="#FFFFFF"/> <!-- Color de fondo -->
+    <corners android:radius="50dp"/> <!-- Radio de las esquinas -->
+    <stroke android:color="#000000" android:width="2dp"/> <!-- Color y grosor del borde -->
+</shape>

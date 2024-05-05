@@ -1,10 +1,12 @@
 package org.cuatrovientos.blabla4v.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -25,13 +27,14 @@ import java.util.Map;
 
 public class UserRegisterActivity extends AppCompatActivity {
 
-    Button btnRegister;
+    TextView btnRegister;
     EditText etUsername, etEmail, etDNI, etPassword, etPlace;
     FirebaseFirestore mFireStore;
     FirebaseAuth mAuth;
 
 
 
+    @SuppressLint({"MissingInflatedId", "WrongViewCast"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,18 +58,10 @@ public class UserRegisterActivity extends AppCompatActivity {
                 String password = etPassword.getText().toString().trim();
                 String place = etPlace.getText().toString().trim();
 
-                if(userName.isEmpty()){
-                    Toast.makeText(UserRegisterActivity.this, "Please fill the username field", Toast.LENGTH_SHORT).show();
-                } else if(email.isEmpty()){
-                    Toast.makeText(UserRegisterActivity.this, "Please fill the email field", Toast.LENGTH_SHORT).show();
-                } else if(dni.isEmpty()){
-                    Toast.makeText(UserRegisterActivity.this, "Please fill the DNI field", Toast.LENGTH_SHORT).show();
-                } else if(password.isEmpty()){
-                    Toast.makeText(UserRegisterActivity.this, "Please fill the password field", Toast.LENGTH_SHORT).show();
+                if(userName.isEmpty() || email.isEmpty() || dni.isEmpty() || password.isEmpty() || place.isEmpty()){
+                    Toast.makeText(UserRegisterActivity.this, "No pueden haber campos vacíos", Toast.LENGTH_SHORT).show();
                 } else if(password.length() < 6){
-                    Toast.makeText(UserRegisterActivity.this, "Password must be at least 6 characters", Toast.LENGTH_SHORT).show();
-                } else if(place.isEmpty()){
-                    Toast.makeText(UserRegisterActivity.this, "Please fill the place field", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UserRegisterActivity.this, "La contraseña debe tener al menos 6 caracteres", Toast.LENGTH_SHORT).show();
                 } else {
                     registerUser(userName, email, dni, password, place);
                 }

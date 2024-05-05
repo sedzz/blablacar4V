@@ -20,6 +20,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
 
@@ -27,7 +28,7 @@ import org.cuatrovientos.blabla4v.R;
 
 public class LoginActivity extends AppCompatActivity {
 
-    TextView btnRegister, forgotPassword, register;
+    TextView btnRegister, forgotPassword, register, moreInfo;
     EditText etEmail, etPassword;
     FirebaseAuth mAuth;
 
@@ -45,6 +46,7 @@ public class LoginActivity extends AppCompatActivity {
         btnRegister = findViewById(R.id.btnLogn);
         forgotPassword = findViewById(R.id.txtForgotPassword);
         register = findViewById(R.id.txtRegister);
+        moreInfo = findViewById(R.id.moreInfo);
 
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,7 +55,7 @@ public class LoginActivity extends AppCompatActivity {
                 String password = etPassword.getText().toString().trim();
 
                 if(email.isEmpty() && password.isEmpty()){
-                    Toast.makeText(LoginActivity.this, "Please fill all the fields", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "No pueden haber campos vacíos", Toast.LENGTH_SHORT).show();
                 }else{
                     loginUser(email, password);
                 }
@@ -67,7 +69,7 @@ public class LoginActivity extends AppCompatActivity {
                 String emailAddress = etEmail.getText().toString().trim();
 
                 if(emailAddress.isEmpty()){
-                    Toast.makeText(LoginActivity.this, "Por favor, introduzca su correo electrónico y a pulse a he olvidado la contraseña", Toast.LENGTH_SHORT).show();
+                    moreInfo.setVisibility(View.VISIBLE);
                     return;
                 }
 
@@ -98,6 +100,11 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void loginUser(String email, String password) {
+        if (email.isEmpty() || password.isEmpty()) {
+            Toast.makeText(LoginActivity.this, "Por favor, introduce un email y una contraseña", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -112,7 +119,11 @@ public class LoginActivity extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(LoginActivity.this, "Error al iniciar sesion", Toast.LENGTH_SHORT).show();
+                if (e instanceof FirebaseAuthInvalidUserException) {
+                    Toast.makeText(LoginActivity.this, "La cuenta con ese email no existe", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(LoginActivity.this, "Error al iniciar sesion", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

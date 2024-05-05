@@ -1,93 +1,232 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.UserRegisterActivity">
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:src="@drawable/logo"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteY="67dp" />
 
-    <androidx.cardview.widget.CardView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="50dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView">
+        android:orientation="vertical">
 
-        <LinearLayout
+
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="10dp">
+            android:layout_height="273dp"
+            android:background="@drawable/green_bg">
 
+            <ImageView
+                android:layout_width="161dp"
+                android:layout_height="146dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="30dp"
+                android:src="@drawable/logo" />
+
+        </FrameLayout>
+
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="62dp"
+            android:layout_marginTop="36.7dp"
+            android:layout_marginRight="62dp"
+            android:background="@drawable/text_border">
+
+            <!-- INPUT -->
             <EditText
                 android:id="@+id/txtName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
+                android:layout_toRightOf="@+id/name_icon"
+                android:background="@android:color/transparent"
                 android:hint="Nombre de usuario"
-                android:inputType="text" />
+                android:inputType="textEmailAddress"
+                android:maxLines="1"
+                android:paddingLeft="17dp"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
 
+            <!-- ICON -->
+            <ImageView
+                android:id="@+id/name_icon"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="17dp"
+                android:src="@drawable/user" />
+
+        </RelativeLayout>
+
+
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="62dp"
+            android:layout_marginTop="12.7dp"
+            android:layout_marginRight="62dp"
+            android:background="@drawable/text_border">
+
+            <!-- INPUT -->
             <EditText
                 android:id="@+id/txtEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="Correo"
-                android:inputType="text" />
+                android:layout_toRightOf="@+id/username_icon"
+                android:background="@android:color/transparent"
+                android:hint="Email"
+                android:inputType="textEmailAddress"
+                android:maxLines="1"
+                android:paddingLeft="17dp"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
 
+            <!-- ICON -->
+            <ImageView
+                android:id="@+id/username_icon"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="17dp"
+                android:src="@drawable/email_login" />
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="62dp"
+            android:layout_marginTop="12.7dp"
+            android:layout_marginRight="62dp"
+            android:background="@drawable/text_border">
+
+            <!-- INPUT -->
             <EditText
                 android:id="@+id/txtDni"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
+                android:layout_toRightOf="@+id/dni_icon"
+                android:background="@android:color/transparent"
                 android:hint="DNI"
-                android:inputType="text" />
+                android:inputType="textEmailAddress"
+                android:maxLines="1"
+                android:paddingLeft="17dp"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
 
+            <!-- ICON -->
+            <ImageView
+                android:id="@+id/dni_icon"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="17dp"
+                android:src="@drawable/dni" />
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="62dp"
+            android:layout_marginTop="12.7dp"
+            android:layout_marginRight="62dp"
+            android:background="@drawable/text_border">
+
+            <!-- INPUT -->
             <EditText
                 android:id="@+id/txtPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="Password"
-                android:inputType="textPassword" />
+                android:layout_toRightOf="@+id/icon"
+                android:background="@android:color/transparent"
+                android:hint="Contraseña"
+                android:inputType="textPassword"
+                android:maxLength="10"
+                android:maxLines="1"
+                android:paddingLeft="17dp"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
+                android:textSize="12sp" />
 
+            <!-- ICON -->
+            <ImageView
+                android:id="@+id/icon"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="17dp"
+                android:src="@drawable/key_login" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="62dp"
+            android:layout_marginTop="12.7dp"
+            android:layout_marginRight="62dp"
+            android:background="@drawable/text_border">
+
+            <!-- INPUT -->
             <EditText
                 android:id="@+id/txtPlace"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="De donde eres"
-                android:inputType="text" />
+                android:layout_toRightOf="@+id/place_icon"
+                android:background="@android:color/transparent"
+                android:hint="Localidad"
+                android:inputType="textPassword"
+                android:maxLength="10"
+                android:maxLines="1"
+                android:paddingLeft="17dp"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
+                android:textSize="12sp" />
 
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+            <!-- ICON -->
+            <ImageView
+                android:id="@+id/place_icon"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="17dp"
+                android:src="@drawable/ic_location_24dp" />
 
-            <Button
-                android:id="@+id/btnRegistry"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/rounded_button"
-                android:text="Registrarse"
-                android:layout_marginTop="40dp"
-                android:layout_marginLeft="100dp"
-                android:textAlignment="center"
-                android:textColor="#042125"/>
+        </RelativeLayout>
 
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+        <TextView
+            android:id="@+id/btnRegistry"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="62dp"
+            android:layout_marginTop="18.7dp"
+            android:layout_marginRight="62dp"
+            android:background="@drawable/button"
+
+            android:gravity="center"
+            android:paddingTop="14dp"
+            android:paddingBottom="14dp"
+            android:text="Registrarse"
+            android:textColor="#ffffff"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
+
+</RelativeLayout>
