@@ -72,10 +72,13 @@ public class DriversFragment extends Fragment {
                 if (createRouteFragment == null || !createRouteFragment.isVisible()) {
                     createRouteFragment = new CreateRouteFragment();
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.replace(R.id.driversFragment, createRouteFragment, "createRouteFragment");
+                    fragmentTransaction.add(R.id.drivers_fragment, createRouteFragment, "createRouteFragment");
                     fragmentTransaction.addToBackStack(null);
                     fragmentTransaction.commit();
                 } else {
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.remove(createRouteFragment);
+                    fragmentTransaction.commit();
                     fragmentManager.popBackStack();
                 }
             }

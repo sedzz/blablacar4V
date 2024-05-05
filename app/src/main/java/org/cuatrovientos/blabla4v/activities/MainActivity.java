@@ -1,19 +1,18 @@
 package org.cuatrovientos.blabla4v.activities;
 
+import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
-import android.widget.Button;
-import android.widget.Toast;
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -28,6 +27,7 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
@@ -37,15 +37,15 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import org.cuatrovientos.blabla4v.R;
 
+import org.cuatrovientos.blabla4v.fragments.DriversFragment;
 import org.cuatrovientos.blabla4v.fragments.SelectTravelFragment;
+import org.cuatrovientos.blabla4v.fragments.UserSettingsFragment;
 import org.cuatrovientos.blabla4v.interfaces.ApiService;
 import org.cuatrovientos.blabla4v.models.Route;
 import org.cuatrovientos.blabla4v.models.RouteResponse;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -64,10 +64,49 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
     FirebaseUser user = mAuth.getCurrentUser();
+    DrawerLayout drawerLayout;
+    AppCompatImageView buttonDrawerToggle;
+    NavigationView navigationView;
+    @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        drawerLayout = findViewById(R.id.drawer_layout);
+        buttonDrawerToggle = findViewById(R.id.buttonDrawer);
+        navigationView = findViewById(R.id.navigationView);
+
+        buttonDrawerToggle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawerLayout.open();
+            }
+        });
+
+
+
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int itemId = item.getItemId();
+
+                if(itemId == R.id.menu_user) {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.drawer_layout,new UserSettingsFragment()).commit();
+                } else if (itemId == R.id.menu_map) {
+
+                } else if (itemId == R.id.menu_routes) {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.drawer_layout,new DriversFragment()).commit();
+                } else if (itemId == R.id.menu_logout) {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.drawer_layout,new SelectTravelFragment()).commit();
+                }
+
+                drawerLayout.closeDrawer(GravityCompat.START);
+                return false;
+            }
+        });
+
+
 
         if (user != null) {
             user.getIdToken(true)
@@ -84,14 +123,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        toggleFragmentsVisibility("map");
+        //toggleFragmentsVisibility("map");
         final boolean[] isFragmentVisible = {false};
 
         ImageButton buttonMap = findViewById(R.id.buttonMap);
         ImageButton buttonDrivers = findViewById(R.id.buttonVolante);
-        Button button2 = findViewById(R.id.btnMenuRoute);
+        //Button button2 = findViewById(R.id.btnMenuRoute);
 
-        button2.setOnClickListener(new View.OnClickListener() {
+        /**button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!isFragmentVisible[0]) {
@@ -110,9 +149,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     isFragmentVisible[0] = false;
                 }
             }
-        });
+        });**/
 
-        buttonMap.setOnClickListener(new View.OnClickListener() {
+       /** buttonMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 toggleFragmentsVisibility("map");
@@ -124,10 +163,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             public void onClick(View v) {
                 toggleFragmentsVisibility("drivers");
             }
-        });
+        });**/
     }
 
-    private void toggleFragmentsVisibility(String mapOrDrivers) {
+    /**private void toggleFragmentsVisibility(String mapOrDrivers) {
         Button buttonRoute = findViewById(R.id.btnMenuRoute);
         Fragment mapFragment = getSupportFragmentManager().findFragmentById(R.id.map);
         Fragment driversFragment = getSupportFragmentManager().findFragmentById(R.id.driversFragment);
@@ -146,7 +185,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             buttonRoute.setVisibility(View.INVISIBLE);
         }
         ft.commit();
-    }
+    }**/
 
     private Retrofit getRetrofit(){
         return new Retrofit.Builder()
