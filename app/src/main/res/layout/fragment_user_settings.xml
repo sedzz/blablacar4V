@@ -76,6 +76,7 @@
                     app:cardElevation="0dp">
 
                     <ImageView
+                        android:id="@+id/profile_image"
                         android:layout_width="150dp"
                         android:layout_height="90dp"
                         android:scaleType="centerCrop"

@@ -8,16 +8,20 @@ public class Route implements Serializable {
     private String driver; // the user who creates the route
     private String start; // start location
     private String end; // end location
+    private String startCoordinates;
+    private String endCoordinates;
     private int availableSeats; // available seats
     private List<String> passengers; // users who join the route
     private String date; // date of the route
     private String time; // time of the route
 
-    public Route(String id, String driver, String start, String end, int availableSeats, List<String> passengers, String date, String time) {
+    public Route(String id, String driver, String start, String startCoordinates, String end, String endCoordinates, int availableSeats, List<String> passengers, String date, String time) {
         this.id = id;
         this.driver = driver;
         this.start = start;
+        this.start = startCoordinates;
         this.end = end;
+        this.end = endCoordinates;
         this.availableSeats = availableSeats;
         this.passengers = passengers;
         this.date = date;
@@ -26,6 +30,11 @@ public class Route implements Serializable {
 
     public Route() {
 
+    }
+
+    public Route(String startCoordinates, String endCoordinates){
+        this.startCoordinates = startCoordinates;
+        this.endCoordinates = endCoordinates;
     }
 
     public String getId() {
@@ -90,5 +99,21 @@ public class Route implements Serializable {
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+    public String getStartCoordinates() {
+        return startCoordinates;
+    }
+
+    public void setStartCoordinates(String startCoordinates) {
+        this.startCoordinates = startCoordinates;
+    }
+
+    public String getEndCoordinates() {
+        return endCoordinates;
+    }
+
+    public void setEndCoordinates(String endCoordinates) {
+        this.endCoordinates = endCoordinates;
     }
 }

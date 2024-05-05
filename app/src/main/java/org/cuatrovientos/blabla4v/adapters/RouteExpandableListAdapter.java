@@ -99,7 +99,6 @@ public class RouteExpandableListAdapter extends BaseExpandableListAdapter {
         String day = route.getDate();
         String time = route.getTime();
 
-
         lblListHeader.setText(route.getStart() + " - " + route.getEnd());
 
         if (passengersCount < totalSeats) {
@@ -110,8 +109,6 @@ public class RouteExpandableListAdapter extends BaseExpandableListAdapter {
 
         lblListHeader.setOnClickListener(v -> {
             Route selectedRoute = listDataHeader.get(groupPosition);
-
-            // Make sure all fields of the route are set here
 
             // Create a new instance of RouteInfoFragment
             RouteInfo routeInfoFragment = new RouteInfo();
@@ -124,6 +121,14 @@ public class RouteExpandableListAdapter extends BaseExpandableListAdapter {
             transaction.replace(R.id.driversFragment, routeInfoFragment);
             transaction.addToBackStack(null);
             transaction.commit();
+        });
+
+        // Set an empty OnClickListener on the ImageView
+        availabilityImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Do nothing
+            }
         });
 
         return convertView;

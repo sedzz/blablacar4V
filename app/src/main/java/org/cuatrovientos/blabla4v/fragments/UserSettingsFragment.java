@@ -46,6 +46,7 @@ public class UserSettingsFragment extends Fragment {
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
 
+
         TextView userEmailTextView = view.findViewById(R.id.userEmail);
         EditText userHomeEditText = view.findViewById(R.id.userHome);
         EditText userDniEditText = view.findViewById(R.id.userDni);

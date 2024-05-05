@@ -28,9 +28,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import org.cuatrovientos.blabla4v.R;
 import org.cuatrovientos.blabla4v.utils.Locations;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class CreateRouteFragment extends Fragment {
@@ -52,8 +55,14 @@ public class CreateRouteFragment extends Fragment {
 
         Locations locations = new Locations();
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, locations.getMunicipios());
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        List<String> municipiosList = new ArrayList<>(locations.getCoordenadas().keySet());
+
+        Collections.sort(municipiosList);
+
+        String[] municipiosArray = municipiosList.toArray(new String[0]);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, municipiosArray);
 
         spinnerStart.setAdapter(adapter);
         spinnerEnd.setAdapter(adapter);
@@ -107,6 +116,14 @@ public class CreateRouteFragment extends Fragment {
                 String date = editTextDate.getText().toString();
                 String time = editTextTime.getText().toString();
 
+                // Obtener las coordenadas de las ubicaciones de inicio y fin
+                String startCoordinates = locations.getCoordenadas().get(start);
+                String endCoordinates = locations.getCoordenadas().get(end);
+
+                // Invertir las coordenadas
+                String invertedStartCoordinates = invertCoordinates(startCoordinates);
+                String invertedEndCoordinates = invertCoordinates(endCoordinates);
+
                 FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
                 if (currentUser != null) {
                     db.collection("user").document(currentUser.getUid())
@@ -114,12 +131,13 @@ public class CreateRouteFragment extends Fragment {
                             .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                 @Override
                                 public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                    String currentUserName = documentSnapshot.getString("name");
 
                                     Map<String, Object> ruta = new HashMap<>();
-                                    ruta.put("driver", currentUserName);
+                                    ruta.put("driver", currentUser.getUid());
                                     ruta.put("start", start);
                                     ruta.put("end", end);
+                                    ruta.put("startCoordinates", invertedStartCoordinates); // Agregar las coordenadas de inicio invertidas
+                                    ruta.put("endCoordinates", invertedEndCoordinates); // Agregar las coordenadas de fin invertidas
                                     ruta.put("availableSeats", availableSeats);
                                     ruta.put("date", date);
                                     ruta.put("time", time);
@@ -144,7 +162,14 @@ public class CreateRouteFragment extends Fragment {
                             });
                 }
             }
+
+            private String invertCoordinates(String coordinates) {
+                String[] splitCoordinates = coordinates.split(",");
+                return splitCoordinates[1] + "," + splitCoordinates[0];
+            }
         });
+
+
 
         return view;
     }

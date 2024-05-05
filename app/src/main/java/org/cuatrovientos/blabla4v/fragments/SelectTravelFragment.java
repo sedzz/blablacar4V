@@ -33,8 +33,8 @@ public class SelectTravelFragment extends Fragment {
 //        String[] opciones = {"Cuatrovientos","Opción 1", "Opción 2", "Opción 3"};
         Locations locations = new Locations();
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, locations.getMunicipios());
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        String[] municipiosArray = locations.getCoordenadas().keySet().toArray(new String[0]);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, municipiosArray);
 
         spinnerVuelta.setAdapter(adapter);
         spinnerIda.setAdapter(adapter);

@@ -1,5 +1,6 @@
 package org.cuatrovientos.blabla4v.activities;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -30,11 +31,15 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import org.cuatrovientos.blabla4v.R;
 
 import org.cuatrovientos.blabla4v.fragments.SelectTravelFragment;
 import org.cuatrovientos.blabla4v.interfaces.ApiService;
+import org.cuatrovientos.blabla4v.models.Route;
 import org.cuatrovientos.blabla4v.models.RouteResponse;
 
 import java.util.ArrayList;
@@ -52,10 +57,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private GoogleMap mMap;
     private MarkerOptions marker;
-    String start = "";
-    String end = "";
+
     private Polyline currentPolyline;
     private List<Marker> markers = new ArrayList<>();
+    List<Route> routes = new ArrayList<>();
 
     FirebaseAuth mAuth = FirebaseAuth.getInstance();
     FirebaseUser user = mAuth.getCurrentUser();
@@ -156,8 +161,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap = googleMap;
         marker = new MarkerOptions();
 
-
-
         mMap.setMinZoomPreference(10);
         mMap.setMaxZoomPreference(15);
         LatLng cuatrovientos = new LatLng(42.8242834, -1.659874);
@@ -166,104 +169,83 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         CameraPosition camera = new CameraPosition.Builder().target(pamplona).zoom(11).tilt(30).build();
         mMap.moveCamera(CameraUpdateFactory.newCameraPosition(camera));
 
-
         marker.position(cuatrovientos);
         marker.title("Centro de Formación Profesional Cuatrovientos");
         marker.draggable(true);
-       // marker.snippet("Caja de texto para introducir datos mas extensos");
         marker.icon(BitmapDescriptorFactory.fromResource(android.R.drawable.btn_star_big_on));
         mMap.addMarker(marker);
 
-        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-            @Override
-            public void onMapClick(LatLng latLng) {
-                if(start.isEmpty()){
-                    start = latLng.longitude+","+latLng.latitude;
-                } else if (end.isEmpty()) {
-                    end = latLng.longitude+","+latLng.latitude;
-                    createRoute();
-                    // Reset start and end for the next route
-                    start = "";
-                    end = "";
-                }
-            }
-        });
-
-        mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
-            @Override
-            public void onMapLongClick(LatLng latLng) {
-                Toast.makeText(MainActivity.this,"Click long on \n"+
-                        "Lat: "+latLng.latitude+"\n"+
-                        "Lng: "+latLng.longitude, Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
-            @Override
-            public void onMarkerDragStart(Marker marker) {
-                marker.hideInfoWindow();
-            }
-
-            @Override
-            public void onMarkerDrag(Marker marker) {
-
-            }
-
-            @Override
-            public void onMarkerDragEnd(Marker marker) {
-                marker.showInfoWindow();
-                Toast.makeText(MainActivity.this,"Marker Dragged to \n"+
-                        "Lat: "+marker.getPosition().latitude+"\n"+
-                        "Lng: "+marker.getPosition().longitude, Toast.LENGTH_SHORT).show();
-
-            }
-        });
+        createRoute();
     }
 
     private void createRoute() {
         Retrofit retrofit = getRetrofit();
         ApiService service = retrofit.create(ApiService.class);
-        Call<RouteResponse> call = service.getRoute("5b3ce3597851110001cf6248228f116492e14a3786afd1ed138bb38f", start, end);
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        call.enqueue(new Callback<RouteResponse>() {
-            @Override
-            public void onResponse(Call<RouteResponse> call, Response<RouteResponse> response) {
-                if (response.isSuccessful()) {
-                    RouteResponse routeResponse = response.body();
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(MainActivity.this, "Route created", Toast.LENGTH_SHORT).show();
+        db.collection("routes")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d("Firestore", document.getId() + " => " + document.getData());
+                                String start = document.getString("startCoordinates");
+                                String end = document.getString("endCoordinates");
+                                String nameStart = document.getString("start");
+                                String nameEnd = document.getString("end");
+
+
+                                Call<RouteResponse> call = service.getRoute("5b3ce3597851110001cf6248228f116492e14a3786afd1ed138bb38f", start, end);
+
+                                call.enqueue(new Callback<RouteResponse>() {
+                                    @Override
+                                    public void onResponse(Call<RouteResponse> call, Response<RouteResponse> response) {
+                                        if (response.isSuccessful()) {
+                                            RouteResponse routeResponse = response.body();
+                                            runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    Toast.makeText(MainActivity.this, "Route created", Toast.LENGTH_SHORT).show();
+                                                }
+                                            });
+                                            Log.d("API_CALL", "API call successful, response: " + response.body());
+                                            drawRoute(response.body(),nameStart,nameEnd);
+
+                                        } else {
+                                            Log.d("API_CALL", "API call unsuccessful, response code: " + response.code());
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<RouteResponse> call, Throwable t) {
+                                        Log.d("API_CALL", "API call failed, error: " + t.getMessage());
+                                    }
+                                });
+
+
+
+                            }
+                        } else {
+                            Log.w("Firestore", "Error getting documents.", task.getException());
+                            Toast.makeText(MainActivity.this, "Error al obtener las rutas", Toast.LENGTH_SHORT).show();
                         }
-                    });
-                    Log.d("API_CALL", "API call successful, response: " + response.body());
-                    drawRoute(response.body());
+                    }
 
-                } else {
-                    Log.d("API_CALL", "API call unsuccessful, response code: " + response.code());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<RouteResponse> call, Throwable t) {
-                Log.d("API_CALL", "API call failed, error: " + t.getMessage());
-            }
-        });
+                });
     }
 
-    private void drawRoute(RouteResponse body) {
-        // Si ya existe una Polyline, la eliminamos
-        if (currentPolyline != null) {
-            currentPolyline.remove();
-        }
+    private int getRandomColor() {
+        int alpha = 255; // fully opaque
+        int red = (int) (Math.random() * 256);
+        int green = (int) (Math.random() * 256);
+        int blue = (int) (Math.random() * 256);
 
-        // Eliminamos los marcadores existentes
-        for (Marker marker : markers) {
-            marker.remove();
-        }
-        // Limpiamos la lista de marcadores
-        markers.clear();
+        return Color.argb(alpha, red, green, blue);
+    }
 
+    private void drawRoute(RouteResponse body,String start, String end) {
         PolylineOptions polylineOptions = new PolylineOptions();
         List<List<Double>> coordinatesList = body.getFeatures().get(0).getGeometry().getCoordinates();
         for (int i = 0; i < coordinatesList.size(); i++) {
@@ -274,17 +256,22 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             if (i == 0 || i == coordinatesList.size() - 1) {
                 MarkerOptions markerOptions = new MarkerOptions().position(latLng);
                 if (i == 0) {
-                    markerOptions.title("Start");
+                    markerOptions.title(start);
                 } else {
-                    markerOptions.title("End");
+                    markerOptions.title(end);
                 }
                 // Agregamos el marcador al mapa y a la lista de marcadores
                 markers.add(mMap.addMarker(markerOptions));
             }
         }
 
+        // Establecemos el color de la línea de la ruta
+        polylineOptions.color(getRandomColor());
+
         // Dibujamos la nueva Polyline y la guardamos en currentPolyline
         currentPolyline = mMap.addPolyline(polylineOptions);
     }
+
+
 
 }
