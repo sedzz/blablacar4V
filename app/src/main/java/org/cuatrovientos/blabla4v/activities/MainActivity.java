@@ -76,7 +76,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         public void onComplete(@NonNull Task<GetTokenResult> task) {
                             if (task.isSuccessful()) {
                                 String idToken = task.getResult().getToken();
-                                Toast.makeText(MainActivity.this, "Token: " + idToken, Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
@@ -204,12 +203,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                     public void onResponse(Call<RouteResponse> call, Response<RouteResponse> response) {
                                         if (response.isSuccessful()) {
                                             RouteResponse routeResponse = response.body();
-                                            runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    Toast.makeText(MainActivity.this, "Route created", Toast.LENGTH_SHORT).show();
-                                                }
-                                            });
                                             Log.d("API_CALL", "API call successful, response: " + response.body());
                                             drawRoute(response.body(),nameStart,nameEnd);
 
@@ -229,7 +222,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                             }
                         } else {
                             Log.w("Firestore", "Error getting documents.", task.getException());
-                            Toast.makeText(MainActivity.this, "Error al obtener las rutas", Toast.LENGTH_SHORT).show();
                         }
                     }
 
