@@ -23,14 +23,16 @@
     </androidx.cardview.widget.CardView>
 
     <TextView
+        android:id="@+id/currentUser"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Username"
-        android:textSize="15sp"
+        android:textSize="20sp"
         android:textColor="@color/black"
         android:gravity="start"/>
 
     <TextView
+        android:id="@+id/currentEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Email"

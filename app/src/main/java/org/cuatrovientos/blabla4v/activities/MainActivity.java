@@ -1,12 +1,15 @@
 package org.cuatrovientos.blabla4v.activities;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,6 +34,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -38,7 +42,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 import org.cuatrovientos.blabla4v.R;
 
 import org.cuatrovientos.blabla4v.fragments.DriversFragment;
-import org.cuatrovientos.blabla4v.fragments.SelectTravelFragment;
 import org.cuatrovientos.blabla4v.fragments.UserSettingsFragment;
 import org.cuatrovientos.blabla4v.interfaces.ApiService;
 import org.cuatrovientos.blabla4v.models.Route;
@@ -67,6 +70,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     DrawerLayout drawerLayout;
     AppCompatImageView buttonDrawerToggle;
     NavigationView navigationView;
+
     @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +81,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         buttonDrawerToggle = findViewById(R.id.buttonDrawer);
         navigationView = findViewById(R.id.navigationView);
 
+        NavigationView navigationView = findViewById(R.id.navigationView);
+        View headerView = navigationView.getHeaderView(0);
+        TextView currentUser = headerView.findViewById(R.id.currentUser);
+        TextView currentEmail = headerView.findViewById(R.id.currentEmail);
+
         buttonDrawerToggle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -84,6 +93,30 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
 
+
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (user != null) {
+            String uid = user.getUid();
+            db.collection("user").document(uid)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot document = task.getResult();
+                                if (document.exists()) {
+                                    currentUser.setText("Bienvenido "+document.getString("name")+ " !");
+                                    currentEmail.setText(document.getString("email"));
+                                }
+                            } else {
+                                Log.d("Firestore", "Error obteniendo el documento", task.getException());
+                            }
+                        }
+                    });
+        }
 
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -98,7 +131,20 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 } else if (itemId == R.id.menu_routes) {
                     getSupportFragmentManager().beginTransaction().replace(R.id.drawer_layout,new DriversFragment()).commit();
                 } else if (itemId == R.id.menu_logout) {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.drawer_layout,new SelectTravelFragment()).commit();
+                    new AlertDialog.Builder(MainActivity.this)
+                            .setTitle("Cerrar sesión")
+                            .setMessage("¿Estás seguro de que quieres cerrar sesión?")
+                            .setPositiveButton("Sí", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    FirebaseAuth.getInstance().signOut();
+                                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            })
+                            .setNegativeButton("No", null)
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .show();
                 }
 
                 drawerLayout.closeDrawer(GravityCompat.START);
@@ -123,69 +169,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        //toggleFragmentsVisibility("map");
-        final boolean[] isFragmentVisible = {false};
-
-        ImageButton buttonMap = findViewById(R.id.buttonMap);
-        ImageButton buttonDrivers = findViewById(R.id.buttonVolante);
-        //Button button2 = findViewById(R.id.btnMenuRoute);
-
-        /**button2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!isFragmentVisible[0]) {
-                    SelectTravelFragment selectTravelFragment = new SelectTravelFragment();
-                    FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction.add(R.id.map, selectTravelFragment, "selectTravelFragment");
-                    fragmentTransaction.commit();
-                    isFragmentVisible[0] = true;
-                } else {
-                    // Cerrar el fragmento
-                    FragmentManager fragmentManager = getSupportFragmentManager();
-                    Fragment fragment = fragmentManager.findFragmentByTag("selectTravelFragment");
-                    if (fragment != null) {
-                        fragmentManager.beginTransaction().remove(fragment).commit();
-                    }
-                    isFragmentVisible[0] = false;
-                }
-            }
-        });**/
-
-       /** buttonMap.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                toggleFragmentsVisibility("map");
-            }
-        });
-
-        buttonDrivers.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                toggleFragmentsVisibility("drivers");
-            }
-        });**/
     }
-
-    /**private void toggleFragmentsVisibility(String mapOrDrivers) {
-        Button buttonRoute = findViewById(R.id.btnMenuRoute);
-        Fragment mapFragment = getSupportFragmentManager().findFragmentById(R.id.map);
-        Fragment driversFragment = getSupportFragmentManager().findFragmentById(R.id.driversFragment);
-        Fragment filtroFragment = getSupportFragmentManager().findFragmentById(R.id.btnMenuRoute);
-
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-
-        if (mapOrDrivers.equalsIgnoreCase("map")) {
-            ft.hide(driversFragment);
-            ft.show(mapFragment);
-            buttonRoute.setVisibility(View.VISIBLE);
-
-        } else {
-            ft.hide(mapFragment);
-            ft.show(driversFragment);
-            buttonRoute.setVisibility(View.INVISIBLE);
-        }
-        ft.commit();
-    }**/
 
     private Retrofit getRetrofit(){
         return new Retrofit.Builder()
