@@ -19,9 +19,13 @@ import org.cuatrovientos.blabla4v.R;
 import org.cuatrovientos.blabla4v.adapters.RouteExpandableListAdapter;
 import org.cuatrovientos.blabla4v.models.Route;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 public class DriversFragment extends Fragment {
 
@@ -48,7 +52,27 @@ public class DriversFragment extends Fragment {
         routeExpandableListAdapter = new RouteExpandableListAdapter(requireContext(), listDataHeader, listDataChild, expandableListViewRoutes);        expandableListViewRoutes.setAdapter(routeExpandableListAdapter);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        // Obtener la fecha actual
+        Calendar calendar = Calendar.getInstance();
+
+        // Establecer el día de la semana como el primer día de la semana
+        calendar.set(Calendar.DAY_OF_WEEK, calendar.getFirstDayOfWeek());
+        Date startDate = calendar.getTime();
+
+        // Avanzar 6 días para obtener el último día de la semana
+        calendar.add(Calendar.DAY_OF_WEEK, 6);
+        Date endDate = calendar.getTime();
+
+        // Formatear las fechas como cadenas en el formato "dd-MM-yyyy"
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+        String startDateString = sdf.format(startDate);
+        String endDateString = sdf.format(endDate);
+
+        // Realizar la consulta para obtener las rutas de esta semana
         db.collection("routes")
+                .whereGreaterThanOrEqualTo("date", startDateString)
+                .whereLessThanOrEqualTo("date", endDateString)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
