@@ -58,8 +58,6 @@ public class UserSettingsFragment extends Fragment {
         Button btnChangePassword = view.findViewById(R.id.btnChangePassword);
         // Make btnSaveChanges invisible initially
         btnSaveChanges.setVisibility(View.INVISIBLE);
-        ImageView logoutImageView = view.findViewById(R.id.logout);
-        ImageView backImageView = view.findViewById(R.id.back);
 
         userHomeEditText.setEnabled(false);
         userDniEditText.setEnabled(false);
@@ -184,38 +182,6 @@ public class UserSettingsFragment extends Fragment {
                             });
                 }
             });
-
-
-            logoutImageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    new AlertDialog.Builder(getContext())
-                            .setTitle("Cerrar sesión")
-                            .setMessage("¿Estás seguro de que quieres cerrar sesión?")
-                            .setPositiveButton("Sí", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    // Cerrar sesión
-                                    FirebaseAuth.getInstance().signOut();
-                                    // Redirigir al usuario a la pantalla de inicio de sesión
-                                    Intent intent = new Intent(getActivity(), LoginActivity.class);
-                                    startActivity(intent);
-                                    getActivity().finish();
-                                }
-                            })
-                            .setNegativeButton("No", null)
-                            .setIcon(android.R.drawable.ic_dialog_alert)
-                            .show();
-                }
-            });
-
-            backImageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(getActivity(), MainActivity.class);
-                    startActivity(intent);
-                }
-            });
-
         }
 
         return view;

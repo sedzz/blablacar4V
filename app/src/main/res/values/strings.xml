@@ -11,4 +11,6 @@
     <string name="skills">Skills</string>
     <string name="ratings">Star Ratings</string>
     <string name="samplereview">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec pretium bibendum sapien, ut euismod massa. Duis convallis sem sed turpis elementum auctor.</string>
+    <string name="open_nav">Open nav</string>
+    <string name="close_nav">Close nav</string>
 </resources>

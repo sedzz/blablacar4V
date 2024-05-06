@@ -1,6 +1,7 @@
 package org.cuatrovientos.blabla4v.activities;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,15 +11,19 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toolbar;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentManager;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -55,6 +60,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -95,41 +101,18 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-        if (user != null) {
-            String uid = user.getUid();
-            db.collection("user").document(uid)
-                    .get()
-                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            if (task.isSuccessful()) {
-                                DocumentSnapshot document = task.getResult();
-                                if (document.exists()) {
-                                    currentUser.setText("Bienvenido "+document.getString("name")+ " !");
-                                    currentEmail.setText(document.getString("email"));
-                                }
-                            } else {
-                                Log.d("Firestore", "Error obteniendo el documento", task.getException());
-                            }
-                        }
-                    });
-        }
-
-
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int itemId = item.getItemId();
 
                 if(itemId == R.id.menu_user) {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.drawer_layout,new UserSettingsFragment()).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new UserSettingsFragment()).commit();
                 } else if (itemId == R.id.menu_map) {
-
+                    Intent intent = new Intent(MainActivity.this, MainActivity.class);
+                    startActivity(intent);
                 } else if (itemId == R.id.menu_routes) {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.drawer_layout,new DriversFragment()).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new DriversFragment()).commit();
                 } else if (itemId == R.id.menu_logout) {
                     new AlertDialog.Builder(MainActivity.this)
                             .setTitle("Cerrar sesión")
@@ -153,6 +136,29 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         });
 
 
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (user != null) {
+            String uid = user.getUid();
+            db.collection("user").document(uid)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot document = task.getResult();
+                                if (document.exists()) {
+                                    currentUser.setText("Bienvenido "+document.getString("name")+ " !");
+                                    currentEmail.setText(document.getString("email"));
+                                }
+                            } else {
+                                Log.d("Firestore", "Error obteniendo el documento", task.getException());
+                            }
+                        }
+                    });
+        }
 
         if (user != null) {
             user.getIdToken(true)
