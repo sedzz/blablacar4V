@@ -17,7 +17,9 @@
         android:layout_marginTop="160dp"
         android:backgroundTint="@color/black"
         android:inputType="date"
-        android:textColor="@color/black" />
+        android:textColor="@color/black"
+        android:focusableInTouchMode="false"
+        />
 
     <EditText
         android:id="@+id/editTextTime"
@@ -27,7 +29,9 @@
         android:layout_marginTop="200dp"
         android:backgroundTint="@color/black"
         android:inputType="time"
-        android:textColor="@color/black" />
+        android:textColor="@color/black"
+        android:focusableInTouchMode="false"
+        />
 
     <TextView
         android:id="@+id/textViewPasajeros"
