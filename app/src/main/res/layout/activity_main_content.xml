@@ -19,6 +19,13 @@
             android:padding="5dp"
             android:src="@drawable/menu" />
 
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/logo"
+            android:layout_gravity="end"
+            />
+
     </Toolbar>
 
 </LinearLayout>
