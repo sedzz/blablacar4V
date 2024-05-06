@@ -15,8 +15,17 @@
             android:icon="@drawable/ic_map"
             android:title="Mapa" />
         <item
-            android:id="@+id/menu_gallery"
+            android:id="@+id/menu_routes"
             android:icon="@drawable/route"
             android:title="Rutas" />
     </group>
+
+        <group
+        android:id="@+id/group_info"
+        android:checkableBehavior="single">
+                <item
+                    android:id="@+id/menu_logout"
+                    android:icon="@drawable/logout"
+                    android:title="Cerrar sesión" />
+        </group>
 </menu>

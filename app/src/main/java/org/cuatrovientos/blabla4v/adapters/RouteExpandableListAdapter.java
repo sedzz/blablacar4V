@@ -11,6 +11,7 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
@@ -111,15 +112,23 @@ public class RouteExpandableListAdapter extends BaseExpandableListAdapter {
             Route selectedRoute = listDataHeader.get(groupPosition);
 
             // Create a new instance of RouteInfoFragment
-            RouteInfo routeInfoFragment = new RouteInfo();
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("selectedRoute", selectedRoute);
-            routeInfoFragment.setArguments(bundle);
+            RouteInfo routeInfoFragment = (RouteInfo) ((FragmentActivity) context).getSupportFragmentManager().findFragmentByTag("routeInfoFragment");
 
-            // Replace the current fragment with RouteInfoFragment
             FragmentTransaction transaction = ((FragmentActivity) context).getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.driversFragment, routeInfoFragment);
-            transaction.addToBackStack(null);
+
+            if (routeInfoFragment == null || !routeInfoFragment.isVisible()) {
+                routeInfoFragment = new RouteInfo();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("selectedRoute", selectedRoute);
+                routeInfoFragment.setArguments(bundle);
+
+                transaction.add(R.id.drivers_fragment, routeInfoFragment, "routeInfoFragment");
+                transaction.addToBackStack(null);
+            } else {
+                transaction.remove(routeInfoFragment);
+                ((FragmentActivity) context).getSupportFragmentManager().popBackStack();
+            }
+
             transaction.commit();
         });
 

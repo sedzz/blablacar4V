@@ -29,6 +29,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import org.cuatrovientos.blabla4v.R;
 import org.cuatrovientos.blabla4v.activities.LoginActivity;
+import org.cuatrovientos.blabla4v.activities.MainActivity;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -210,10 +211,8 @@ public class UserSettingsFragment extends Fragment {
             backImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // Cerrar el fragmento actual y volver a MainActivity
-                    if (getFragmentManager() != null) {
-                        getFragmentManager().popBackStack();
-                    }
+                    Intent intent = new Intent(getActivity(), MainActivity.class);
+                    startActivity(intent);
                 }
             });
 

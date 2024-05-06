@@ -36,7 +36,7 @@ public class HeaderFragment extends Fragment {
 
                 // Usa FragmentTransaction para reemplazar el fragmento actual con UserSettingsFragment
                 FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-                transaction.replace(R.id.menuInterfaz, userSettingsFragment); // Ahora usamos R.id.menuInterfaz como el contenedor de fragmentos
+               // transaction.replace(R.id.menuInterfaz, userSettingsFragment); // Ahora usamos R.id.menuInterfaz como el contenedor de fragmentos
                 transaction.addToBackStack(null);
                 transaction.commit();
             }

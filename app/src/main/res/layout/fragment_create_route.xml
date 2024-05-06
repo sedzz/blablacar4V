@@ -3,9 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="300dp"
-    android:layout_marginTop="190dp"
+    android:layout_marginTop="300dp"
     android:background="#12a14b"
     tools:context=".fragments.CreateRouteFragment">
+
+
 
     <EditText
         android:id="@+id/editTextDate"
