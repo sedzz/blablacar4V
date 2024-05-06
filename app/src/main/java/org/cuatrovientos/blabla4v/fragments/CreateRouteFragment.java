@@ -75,11 +75,20 @@ public class CreateRouteFragment extends Fragment {
                 int month = c.get(Calendar.MONTH);
                 int day = c.get(Calendar.DAY_OF_MONTH);
 
+
                 DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(),
                         new DatePickerDialog.OnDateSetListener() {
                             @Override
                             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                                editTextDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
+                                String ceroDay = "";
+                                String ceroMonth = "";
+                                if (dayOfMonth < 10){
+                                    ceroDay = "0";
+                                }
+                                if (month < 10){
+                                    ceroMonth = "0";
+                                }
+                                editTextDate.setText(ceroDay + dayOfMonth + "-" + ceroMonth + (monthOfYear + 1) + "-" + year);
                             }
                         }, year, month, day);
                 datePickerDialog.show();
