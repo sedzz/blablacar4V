@@ -8,13 +8,14 @@
     android:background="@color/white"
     tools:context=".fragments.DriversFragment">
 
-
+    
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:clickable="false"
         android:focusable="false">
+
 
         <include
             layout="@layout/activity_main_content"
@@ -33,7 +34,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="15dp"
-                android:text="Rutas Actuales"
+                android:text="Rutas de la semana actual"
                 android:textSize="25dp" />
 
             <ExpandableListView
